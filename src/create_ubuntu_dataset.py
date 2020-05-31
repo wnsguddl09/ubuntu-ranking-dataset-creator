@@ -6,6 +6,7 @@ import tarfile
 import csv
 
 import nltk
+from nltk.tokenize import TweetTokenizer
 from nltk.stem import SnowballStemmer, WordNetLemmatizer
 
 __author__ = 'rkadlec'
@@ -292,6 +293,7 @@ if __name__ == '__main__':
         header.extend(list(map(lambda x: "Distractor_{}".format(x), range(args.n))))
         w.writerow(header)
 
+        tokenizer = TweetTokenizer(preserve_case=True, reduce_len=True, strip_handles=False)
         stemmer = SnowballStemmer("english")
         lemmatizer = WordNetLemmatizer()
 
@@ -300,7 +302,7 @@ if __name__ == '__main__':
             translated_row.extend(row[2])
             
             if args.tokenize:
-                translated_row = list(map(nltk.word_tokenize, translated_row))
+                translated_row = list(map(tokenizer.tokenize, translated_row))
                 if args.stem:
                     translated_row = list(map(lambda sub: list(map(stemmer.stem, sub)), translated_row))
                 if args.lemmatize:
@@ -326,6 +328,8 @@ if __name__ == '__main__':
                                     create_single_dialog_train_example(context_dialog, candidates, rng,
                                                                        args.p, max_context_length=args.max_context_length))
 
+
+        tokenizer = TweetTokenizer(preserve_case=True, reduce_len=True, strip_handles=False)
         stemmer = SnowballStemmer("english")
         lemmatizer = WordNetLemmatizer()
 
@@ -337,7 +341,7 @@ if __name__ == '__main__':
             translated_row = row
 
             if args.tokenize:
-                translated_row = [nltk.word_tokenize(row[i]) for i in [0,1]]
+                translated_row = [tokenizer.tokenize(row[i]) for i in [0,1]]
 
                 if args.stem:
                     translated_row = list(map(lambda sub: list(map(stemmer.stem, sub)), translated_row))
