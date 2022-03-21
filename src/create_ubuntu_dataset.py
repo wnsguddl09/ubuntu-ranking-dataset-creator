@@ -33,7 +33,7 @@ def translate_dialog_to_lists(dialog_filename):
     :return:
     """
 
-    dialog_file = open(dialog_filename, 'r')
+    dialog_file = open(dialog_filename, 'r', encoding="UTF-8")
     dialog_reader = csv.reader(dialog_file, delimiter='\t',quoting=csv.QUOTE_NONE)
 
     # go through the dialog
@@ -279,7 +279,7 @@ if __name__ == '__main__':
     def create_eval_dataset(args, file_list_csv):
         rng = random.Random(args.seed)
         # training dataset
-        f = open(os.path.join("meta", file_list_csv), 'r')
+        f = open(os.path.join("meta", file_list_csv), 'r', encoding="UTF-8")
         dialog_paths = list(map(lambda path: os.path.join(args.data_root, "dialogs", path), convert_csv_with_dialog_paths(f)))
 
         data_set = create_examples(dialog_paths,
@@ -287,7 +287,7 @@ if __name__ == '__main__':
                                    lambda context_dialog, candidates : create_single_dialog_test_example(context_dialog, candidates, rng,
                                                                      args.n, args.max_context_length))
         # output the dataset
-        w = csv.writer(open(args.output, 'w'))
+        w = csv.writer(open(args.output, 'w', encoding="UTF-8"))
         # header
         header = ["Context", "Ground Truth Utterance"]
         header.extend(list(map(lambda x: "Distractor_{}".format(x), range(args.n))))
@@ -319,7 +319,7 @@ if __name__ == '__main__':
         rng = random.Random(args.seed)
         # training dataset
 
-        f = open(os.path.join("meta", "trainfiles.csv"), 'r')
+        f = open(os.path.join("meta", "trainfiles.csv"), 'r', encoding="UTF-8")
         dialog_paths = list(map(lambda path: os.path.join(args.data_root, "dialogs", path), convert_csv_with_dialog_paths(f)))
 
         train_set = create_examples(dialog_paths,
@@ -334,7 +334,7 @@ if __name__ == '__main__':
         lemmatizer = WordNetLemmatizer()
 
         # output the dataset
-        w = csv.writer(open(args.output, 'w'))
+        w = csv.writer(open(args.output, 'w', encoding="UTF-8"))
         # header
         w.writerow(["Context", "Utterance", "Label"])
         for row in train_set:
@@ -408,4 +408,3 @@ if __name__ == '__main__':
 
     # create dataset
     args.func(args)
-
